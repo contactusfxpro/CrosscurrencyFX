@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 app.set("trust proxy", 1);
 
-const allowedOrigins = ["http://localhost:5173","https://fx-pro-nine.vercel.app","http://13.210.23.61"];
+const allowedOrigins = ["http://localhost:5173","https://fx-pro-nine.vercel.app","http://13.210.23.61","http://13.239.124.220"];
 app.use(
   cors({
     origin: function (origin, callback) {
