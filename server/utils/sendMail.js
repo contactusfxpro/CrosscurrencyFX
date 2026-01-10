@@ -4,13 +4,13 @@ const sendMail = async (to, subject, html) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "contactus.fxpro@gmail.com",
-      pass: "myidqjpjkmralnls",
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
   const mailOptions = {
-    from: "contactus.fxpro@gmail.com",
+    from: process.env.EMAIL_USER,
     to,
     subject,
     html,
@@ -20,6 +20,7 @@ const sendMail = async (to, subject, html) => {
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error("Error sending email:", error);
+    throw error; // ✅ VERY IMPORTANT
   }
 };
 
