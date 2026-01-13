@@ -48,68 +48,61 @@ const ConverterCard = ({ rates, from, to, setFrom, setTo }) => {
         className="w-full p-4 mb-6  rounded-xl dark:bg-[#0f172a] bg-[#f5f5f7] outline-none focus:ring-1 focus:ring-blue-500"
       />
 
-      <div className="grid grid-cols-[minmax(0,1fr)_48px_minmax(0,1fr)] items-center gap-4 mb-6 w-full">
-        <div className="flex items-center gap-3 rounded-xl p-3 bg-[#f5f5f7] dark:bg-[#0f172a] w-full">
-          {getCurrencyFlag(from) && (
-            <span className={`fi fi-${getCurrencyFlag(from)} flag-icon-lg`} />
-          )}
-          <select
-            value={from}
-            onChange={(e) => {
-              setFrom(e.target.value);
-
-              trackEvent("currency_from_selected", {
-                from_currency: e.target.value,
-                to_currency: to,
-              });
-            }}
-          >
-            {currencies.map((c) => (
-              <option
-                key={c.code}
-                value={c.code}
-                className="dark:bg-[#020617] cursor-pointer"
-              >
-                {c.code} — {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          onClick={handleSwap}
-          className="w-12 h-12 flex items-center justify-center rounded-full cursor-pointer bg-gray-100 dark:bg-gray-800 hover:rotate-180 transition-transform duration-300"
-          title="Swap currencies"
-        >
-          <ArrowRightLeft size={20} />
-        </button>
+     <div className="flex flex-col md:grid md:grid-cols-[minmax(0,1fr)_48px_minmax(0,1fr)] items-center gap-4 mb-6 w-full">
 
         <div className="flex items-center gap-3 rounded-xl p-3 bg-[#f5f5f7] dark:bg-[#0f172a] w-full">
-          {getCurrencyFlag(to) && (
-            <span className={`fi fi-${getCurrencyFlag(to)} flag-icon-lg`} />
-          )}
-          <select
-            value={to}
-            onChange={(e) => {
-              setTo(e.target.value);
+  {getCurrencyFlag(from) && (
+    <span className={`fi fi-${getCurrencyFlag(from)} flag-icon-lg shrink-0`} />
+  )}
+  <select
+    value={from}
+    onChange={(e) => setFrom(e.target.value)}
+    className="bg-transparent w-full outline-none text-sm md:text-base"
+  >
+    {currencies.map((c) => (
+      <option
+        key={c.code}
+        value={c.code}
+        className="dark:bg-[#020617]"
+      >
+        {c.code} — {c.name}
+      </option>
+    ))}
+  </select>
+</div>
 
-              trackEvent("currency_to_selected", {
-                from_currency: from,
-                to_currency: e.target.value,
-              });
-            }}
-          >
-            {currencies.map((c) => (
-              <option
-                key={c.code}
-                value={c.code}
-                className="dark:bg-[#020617] cursor-pointer"
-              >
-                {c.code} — {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+
+       <button
+  onClick={handleSwap}
+  className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:rotate-180 transition-transform duration-300"
+  title="Swap currencies"
+>
+  <ArrowUpDown size={18} className="md:hidden" />
+  <ArrowRightLeft size={20} className="hidden md:block" />
+</button>
+
+
+        <div className="flex items-center gap-3 rounded-xl p-3 bg-[#f5f5f7] dark:bg-[#0f172a] w-full">
+  {getCurrencyFlag(to) && (
+    <span className={`fi fi-${getCurrencyFlag(to)} flag-icon-lg shrink-0`} />
+  )}
+  <select
+    value={to}
+    onChange={(e) => setTo(e.target.value)}
+    className="bg-transparent w-full outline-none text-sm md:text-base"
+  >
+    {currencies.map((c) => (
+      <option
+        key={c.code}
+        value={c.code}
+        className="dark:bg-[#020617]"
+      >
+        {c.code} — {c.name}
+      </option>
+    ))}
+  </select>
+</div>
+
       </div>
 
       <div className="text-center text-xl w-full p-4 mb-6  bg-[#f5f5f7]  rounded-xl dark:bg-[#0f172a]">
