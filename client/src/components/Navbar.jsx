@@ -15,6 +15,11 @@ import {
 import ContactModal from "./ContactModal";
 import { Link, NavLink } from "react-router-dom";
 import { Home, Coins, BarChart3 } from "lucide-react";
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 
 const Navbar = () => {
   const [open1, setOpen1] = useState(false);
@@ -156,7 +161,13 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setOpen1(true)}
+              onClick={() => {
+    setOpen1(true);
+
+    trackEvent("contact_modal_opened", {
+      source: "navbar"
+    });
+  }}
               className="rounded-lg gradient text-white px-4 py-2 cursor-pointer text-sm font-semibold flex items-center gap-2"
             >
               <Mail className="w-5 h-5 block  lg:hidden" />

@@ -3,7 +3,11 @@ import { X } from "lucide-react";
 import tabd from "../assets/tabl.svg";
 import tabl from "../assets/tabd.svg";
 import toast, { Toaster } from "react-hot-toast";
-
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 const initialState = {
   name: "",
   email: "",
@@ -89,6 +93,10 @@ const ContactModal = ({ open, onClose }) => {
       setForm(initialState);
       onClose();
       toast.success("Enquiry Request Submitted");
+      trackEvent("contact_form_submitted", {
+        has_name: !!form.name,
+        has_email: !!form.email,
+      });
     } catch (err) {
       alert("Something went wrong. Please try again.");
     } finally {

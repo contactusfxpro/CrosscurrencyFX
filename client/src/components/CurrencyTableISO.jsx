@@ -1,6 +1,11 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { getCurrencyFlag } from "../utils/currencyToCountry";
 import { Search } from "lucide-react";
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 
 const CurrencyTableISO = ({ data }) => {
   const [search, setSearch] = useState("");
@@ -13,6 +18,14 @@ const CurrencyTableISO = ({ data }) => {
         item.country.toLowerCase().includes(search.toLowerCase())
     );
   }, [data, search]);
+  useEffect(() => {
+    if (search.length >= 2) {
+      trackEvent("currency_search_results", {
+        search_term: search,
+        results_count: filteredData.length,
+      });
+    }
+  }, [filteredData]);
 
   return (
     <div className="w-full">
@@ -26,7 +39,16 @@ const CurrencyTableISO = ({ data }) => {
             type="text"
             placeholder="Search currency..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearch(value);
+
+              if (value.length >= 2) {
+                trackEvent("currency_search_used", {
+                  search_term: value,
+                });
+              }
+            }}
             className="w-64 px-7 py-2 text-sm rounded-lg border border-gray-300 
                      dark:border-gray-700 dark:bg-[#020617] 
                      focus:outline-none focus:ring-1 focus:ring-blue-500"

@@ -6,6 +6,11 @@ import { Download } from "lucide-react";
 import { useLoading } from "../context/LoadingContext";
 import ExportCsv from "../components/ExportCsv";
 import Footer from "../components/Footer";
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 
 const Home = () => {
   const [base, setBase] = useState("USD");
@@ -191,7 +196,13 @@ const Home = () => {
               <SearchableDropdown
                 options={BASE_OPTIONS}
                 value={base}
-                onChange={setBase}
+                onChange={(value) => {
+                  setBase(value);
+
+                  trackEvent("base_currency_changed", {
+                    base_currency: value,
+                  });
+                }}
               />
             </div>
             <ExportCsv

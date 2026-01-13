@@ -3,10 +3,21 @@ import { currencies } from "../utils/currencies";
 import { getCurrencyFlag } from "../utils/currencyToCountry";
 import { ArrowRightLeft, ArrowUpDown } from "lucide-react";
 
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
+
 const ConverterCard = ({ rates, from, to, setFrom, setTo }) => {
   const [amount, setAmount] = useState(1);
 
   const handleSwap = () => {
+    trackEvent("currency_swap_clicked", {
+      from_currency: from,
+      to_currency: to,
+    });
+
     setFrom(to);
     setTo(from);
   };
@@ -25,7 +36,15 @@ const ConverterCard = ({ rates, from, to, setFrom, setTo }) => {
       <input
         type="number"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) => {
+          setAmount(e.target.value);
+
+          trackEvent("currency_amount_entered", {
+            amount: e.target.value,
+            from_currency: from,
+            to_currency: to,
+          });
+        }}
         className="w-full p-4 mb-6  rounded-xl dark:bg-[#0f172a] bg-[#f5f5f7] outline-none focus:ring-1 focus:ring-blue-500"
       />
 
@@ -36,11 +55,21 @@ const ConverterCard = ({ rates, from, to, setFrom, setTo }) => {
           )}
           <select
             value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="flex-1 w-full  outline-none"
+            onChange={(e) => {
+              setFrom(e.target.value);
+
+              trackEvent("currency_from_selected", {
+                from_currency: e.target.value,
+                to_currency: to,
+              });
+            }}
           >
             {currencies.map((c) => (
-              <option key={c.code} value={c.code} className="dark:bg-[#020617] cursor-pointer">
+              <option
+                key={c.code}
+                value={c.code}
+                className="dark:bg-[#020617] cursor-pointer"
+              >
                 {c.code} — {c.name}
               </option>
             ))}
@@ -61,11 +90,21 @@ const ConverterCard = ({ rates, from, to, setFrom, setTo }) => {
           )}
           <select
             value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="flex-1 w-full bg-transparent outline-none"
+            onChange={(e) => {
+              setTo(e.target.value);
+
+              trackEvent("currency_to_selected", {
+                from_currency: from,
+                to_currency: e.target.value,
+              });
+            }}
           >
             {currencies.map((c) => (
-              <option key={c.code} value={c.code} className="dark:bg-[#020617] cursor-pointer">
+              <option
+                key={c.code}
+                value={c.code}
+                className="dark:bg-[#020617] cursor-pointer"
+              >
                 {c.code} — {c.name}
               </option>
             ))}

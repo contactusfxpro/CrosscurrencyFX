@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 
 export default function SearchableDropdown({
   options,
@@ -44,7 +49,13 @@ export default function SearchableDropdown({
   return (
     <div ref={ref} className="relative w-34" onKeyDown={onKeyDown}>
       <button
-        onClick={() => setOpen((o) => !o)}
+         onClick={() => {
+    setOpen((o) => !o);
+
+    trackEvent("base_currency_dropdown_opened", {
+      current_value: value || "none"
+    });
+  }}
         className="flex w-full items-center justify-between rounded-lg border border-slate-300 bg-white dark:bg-black dark:border-gray-700 dark:text-[#f4f4f4] px-3 py-2 text-sm focus:outline-none "
       >
         <span className={value ? "text-slate-900 dark:text-[#f4f4f4]" : "text-slate-400"}>

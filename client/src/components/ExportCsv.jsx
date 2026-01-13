@@ -1,5 +1,10 @@
 import { Download } from "lucide-react";
 import * as XLSX from "xlsx-js-style";
+const trackEvent = (name, params = {}) => {
+  if (window.gtag) {
+    window.gtag("event", name, params);
+  }
+};
 
 const formatUtcForFilename = (dateInput) => {
   const d = new Date(dateInput);
@@ -23,6 +28,11 @@ const formatUtcForFilename = (dateInput) => {
 const ExportCsv = ({ rates, currencies, base, lastUpdated }) => {
   const exportToExcel = () => {
     if (!rates || currencies.length === 0) return;
+     trackEvent("currency_export_clicked", {
+    base_currency: base,
+    total_currencies: currencies.length,
+    last_updated: lastUpdated || "unknown"
+  });
 
     const heading = [["Cross Currency Rates"]];
     const meta = [
