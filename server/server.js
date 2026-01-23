@@ -17,6 +17,7 @@ const allowedOrigins = [
   "http://13.239.124.220",
   "http://crosscurrencyfx.com",
   "https://crosscurrencyfx.com",
+  "https://www.crosscurrencyfx.com",
 ];
 app.use(
   cors({
